@@ -1,11 +1,29 @@
 // 接口类型定义
 
-import DashBoard from '@/views/dashboard'
-
 export interface Result<T = any> {
   code: number
   data: T
   msg: string
+}
+
+export interface ResultData<T> {
+  list: T[]
+  page: {
+    pageNum: number
+    pageSize: number
+    total: number | 0
+  }
+}
+
+export interface PageParams {
+  pageNum: number | undefined
+  pageSize: number | undefined
+}
+
+export interface Params extends PageParams {
+  userId?: number
+  userName?: string
+  state?: number
 }
 
 export namespace Login {

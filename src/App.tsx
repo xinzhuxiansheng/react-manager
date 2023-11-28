@@ -3,7 +3,7 @@ import { RouterProvider, BrowserRouter } from 'react-router-dom'
 import { ConfigProvider, App as AntdApp } from 'antd'
 import Router from './router'
 import AntdGlobal from './utils/AntdGlobal'
-import './App.css'
+import './App.less'
 
 function App() {
   // return <RouterProvider router={router} />

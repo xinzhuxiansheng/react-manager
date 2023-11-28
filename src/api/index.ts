@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { Login, User, Databoard } from '@/types/api'
+import { ResultData, Login, User, Databoard } from '@/types/api'
 export default {
   login(params: Login.params) {
     return request.post<string>('/users/login', params, { showLoading: false })
@@ -22,5 +22,8 @@ export default {
   },
   getRadarData() {
     return request.get<Databoard.RadarData>('/order/dashboard/getRadarData')
+  },
+  getUserList() {
+    return request.get<ResultData<User.UserItem>>('/users/list')
   }
 }

@@ -59,9 +59,8 @@ const App: React.FC = () => {
           <div className={styles.wrapper}>
             <Outlet></Outlet>
           </div>
-          <NavFooter />
           {/* <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>content</div> */}
-
+          <NavFooter />
           {/* <NavFooter />
           </Content> */}
           {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer> */}
