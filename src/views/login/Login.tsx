@@ -1,14 +1,28 @@
-import axios from 'axios'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import request from '@/utils/request'
 import { Button, Form, Input } from 'antd'
 import api from '@/api'
-import { Login } from '@/types/api'
 import styles from './index.module.less'
+import storage from '@/utils/storage'
+import { message } from '@/utils/AntdGlobal'
+import store from '@/store'
+
 export default function LoginFC() {
+  const [loading, setLoading] = useState(false)
   const onFinish = async (values: any) => {
-    const data = await api.login(values)
-    console.log('data', data)
+    try {
+      setLoading(true)
+      const data: any = await api.login(values)
+      setLoading(false)
+      storage.set('token', data)
+      message.success('登录成功')
+      const params = new URLSearchParams(location.search)
+      setTimeout(() => {
+        location.href = params.get('callback') || '/welcome'
+      })
+    } catch (error) {
+      setLoading(false)
+    }
   }
 
   return (
@@ -23,16 +37,16 @@ export default function LoginFC() {
           // onFinishFailed={onFinishFailed}
           autoComplete='off'
         >
-          <Form.Item name='username' rules={[{ required: true, message: 'Please input your username!' }]}>
+          <Form.Item name='userName' rules={[{ required: true, message: 'Please input your username!' }]}>
             <Input />
           </Form.Item>
 
-          <Form.Item name='password' rules={[{ required: true, message: 'Please input your password!' }]}>
+          <Form.Item name='userPwd' rules={[{ required: true, message: 'Please input your password!' }]}>
             <Input.Password />
           </Form.Item>
 
           <Form.Item>
-            <Button type='primary' block htmlType='submit'>
+            <Button type='primary' block htmlType='submit' loading={loading}>
               登录
             </Button>
           </Form.Item>

@@ -1,27 +1,30 @@
 import axios, { AxiosError } from 'axios'
-import { message } from 'antd'
 import { showLoading, hideLoading } from './loading'
 import { error } from 'console'
 import storage from './storage'
 import env from '@/config'
+import { Result } from '@/types/api'
+import { message } from './AntdGlobal'
 
 // 创建实例
 const instance = axios.create({
   baseURL: '/api',
   timeout: 8000,
   timeoutErrorMessage: '请求超时，请稍后再试',
-  withCredentials: true
+  withCredentials: true,
+  headers: {
+    icode: 'A7EEA094EAA44F4'
+  }
 })
 
 // 请求拦截器
 instance.interceptors.request.use(
   config => {
-    showLoading()
+    if (config.showLoading) showLoading()
     const token = storage.get('token')
     if (token) {
-      config.headers.Authorization = 'Token::' + token
+      config.headers.Authorization = 'Bearer ' + token
     }
-    config.headers.icode = 'A7EEA094EAA44F4'
     if (env.mock) {
       config.baseURL = env.mockApi
     } else {
@@ -39,15 +42,19 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   response => {
-    const data = response.data
+    const data: Result = response.data
     hideLoading()
     if (data.code === 500001) {
       message.error(data.msg)
-      localStorage.removeItem('token')
+      storage.remove('token')
       //location.href = '/login'
     } else if (data.code != 0) {
-      message.error(data.msg)
-      return Promise.reject(data)
+      if (response.config.showError === false) {
+        return Promise.resolve(data)
+      } else {
+        message.error(data.msg)
+        return Promise.reject(data)
+      }
     }
     return data.data
   },
@@ -58,11 +65,15 @@ instance.interceptors.response.use(
   }
 )
 
+interface IConfig {
+  showLoading?: boolean
+  showError?: boolean
+}
 export default {
-  get<T>(url: string, params: object): Promise<T> {
-    return instance.get(url, { params })
+  get<T>(url: string, params?: object, options: IConfig = { showLoading: true, showError: true }): Promise<T> {
+    return instance.get(url, { params, ...options })
   },
-  post<T>(url: string, params: object): Promise<T> {
-    return instance.post(url, params)
+  post<T>(url: string, params: object, options: IConfig = { showLoading: true, showError: true }): Promise<T> {
+    return instance.post(url, params, options)
   }
 }

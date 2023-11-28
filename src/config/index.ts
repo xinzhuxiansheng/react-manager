@@ -15,7 +15,7 @@ const config = {
     uploadApi: 'http://api-driver-dev.marsview.cc',
     cdn: 'http://xxx.aliyun.com',
     mock: false,
-    mockApi: 'https:xxxx'
+    mockApi: 'http://localhost:5000'
   },
   stg: {
     baseApi: '/api',

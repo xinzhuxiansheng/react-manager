@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { RouterProvider, BrowserRouter } from 'react-router-dom'
-import { ConfigProvider } from 'antd'
-import router from './router'
-import './App.css'
+import { ConfigProvider, App as AntdApp } from 'antd'
 import Router from './router'
+import AntdGlobal from './utils/AntdGlobal'
+import './App.css'
 
 function App() {
   // return <RouterProvider router={router} />
@@ -16,9 +16,12 @@ function App() {
         }
       }}
     >
-      <BrowserRouter>
-        <Router />
-      </BrowserRouter>
+      <AntdApp>
+        <AntdGlobal />
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </AntdApp>
     </ConfigProvider>
   )
 }
