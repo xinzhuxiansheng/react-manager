@@ -1,6 +1,7 @@
 import { createHashRouter, createBrowserRouter, Navigate, useRoutes } from 'react-router-dom'
 import Login from '@/views/login/Login'
 import Welcome from '@/views/welcome'
+import Dashboard from '@/views/dashboard'
 import Error403 from '@/views/403'
 import Error404 from '@/views/404'
 import Layout from '@/layout'
@@ -20,6 +21,10 @@ const route = [
       {
         path: '/welcome',
         element: <Welcome />
+      },
+      {
+        path: '/dashboard',
+        element: <Dashboard />
       }
     ]
   },

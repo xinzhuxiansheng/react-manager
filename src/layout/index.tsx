@@ -7,20 +7,19 @@ import NavFooter from '@/components/NavFooter'
 import SideMenu from '@/components/Menu'
 import api from '@/api'
 import styles from './index.module.less'
-import store, { useBearStore } from '@/store'
-const { Header, Content, Footer, Sider } = Layout
+import { useStore } from '@/store'
+const { Header, Sider } = Layout
 
 const App: React.FC = () => {
   const {
     token: { colorBgContainer }
   } = theme.useToken()
 
-  const state = useBearStore()
+  const state = useStore()
 
   useEffect(() => {
     getUserInfo()
   }, [])
-
   const getUserInfo = async () => {
     const data = await api.getUserInfo()
     state.updateUserInfo(data)
@@ -56,14 +55,15 @@ const App: React.FC = () => {
           <Header style={{ padding: 0, height: 50, background: colorBgContainer }}>
             <NavHeader />
           </Header>
-          <Content className={styles.content}>
-            <div className={styles.wrapper}>
-              <Outlet></Outlet>
-            </div>
-            {/* <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>content</div> */}
+          {/* <Content className={styles.content}> */}
+          <div className={styles.wrapper}>
+            <Outlet></Outlet>
+          </div>
+          <NavFooter />
+          {/* <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>content</div> */}
 
-            <NavFooter />
-          </Content>
+          {/* <NavFooter />
+          </Content> */}
           {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer> */}
         </Layout>
       </Layout>

@@ -3,10 +3,10 @@ import { Breadcrumb, Switch, Dropdown } from 'antd'
 import type { MenuProps } from 'antd'
 import styles from './index.module.less'
 // import storage from '@/utils/storage'
-import store, { useBearStore } from '@/store'
+import { useStore } from '@/store'
 import storage from '@/utils/storage'
 const NavHeader = () => {
-  const userInfo = useBearStore(state => state.userInfo)
+  const userInfo = useStore(state => state.userInfo)
   const breadList = [{ title: '首页' }, { title: '工作台' }]
   const items: MenuProps['items'] = [
     {
