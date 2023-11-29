@@ -23,7 +23,7 @@ export default {
   getRadarData() {
     return request.get<Databoard.RadarData>('/order/dashboard/getRadarData')
   },
-  getUserList() {
-    return request.get<ResultData<User.UserItem>>('/users/list')
+  getUserList(params: User.Params) {
+    return request.get<ResultData<User.UserItem>>('/users/list', params)
   }
 }

@@ -20,12 +20,6 @@ export interface PageParams {
   pageSize: number | undefined
 }
 
-export interface Params extends PageParams {
-  userId?: number
-  userName?: string
-  state?: number
-}
-
 export namespace Login {
   export interface params {
     userName: string
@@ -34,6 +28,12 @@ export namespace Login {
 }
 
 export namespace User {
+  export interface Params extends PageParams {
+    userId?: number
+    userName?: string
+    state?: number
+  }
+
   export interface UserItem {
     _id: string
     userId: number
