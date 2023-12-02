@@ -6,66 +6,82 @@ import api from '@/api'
 import { formatDate } from '@/utils/index'
 import CreateUser from './CreateUser'
 import { IAction } from '@/types/modal'
+import { useAntdTable } from 'ahooks'
 export default function UserList() {
   const [form] = Form.useForm()
-  const [data, setData] = useState<User.UserItem[]>([])
-  const [total, setTotal] = useState(0)
+  // const [data, setData] = useState<User.UserItem[]>([])
+  // const [total, setTotal] = useState(0)
   const [userIds, setUserIds] = useState<number[]>([])
   const userRef = useRef<{
     open: (type: IAction, data?: User.UserItem) => void
   }>()
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10
+  // const [pagination, setPagination] = useState({
+  //   current: 1,
+  //   pageSize: 10
+  // })
+
+  // useEffect(() => {
+  //   getUserList({
+  //     pageNum: pagination.current,
+  //     pageSize: pagination.pageSize
+  //   })
+  // }, [pagination.current, pagination.pageSize])
+
+  const getTableData = ({ current, pageSize }: { current: number; pageSize: number }, formData: User.Params) => {
+    return api
+      .getUserList({
+        ...formData,
+        pageNum: current,
+        pageSize: pageSize
+      })
+      .then(data => {
+        return {
+          total: data.page.total,
+          list: data.list
+        }
+      })
+  }
+
+  const { tableProps, search } = useAntdTable(getTableData, {
+    form,
+    defaultPageSize: 10
   })
 
-  useEffect(() => {
-    getUserList({
-      pageNum: pagination.current,
-      pageSize: pagination.pageSize
-    })
-  }, [pagination.current, pagination.pageSize])
-
-  // const getTableData = ()=>{
-  //  return api.getUserList({
-  //   ...values,
-  //   pageNum:
-  //  })
-  // }
-
   const handleReset = () => {
-    form.resetFields()
+    // form.resetFields()
+    search.reset()
   }
 
   const handleSearch = () => {
-    getUserList({
-      pageNum: 1
-    })
+    // getUserList({
+    //   pageNum: 1
+    // })
+    search.submit()
   }
 
-  const getUserList = async (params: PageParams) => {
-    const values = form.getFieldsValue()
-    const data = await api.getUserList({
-      ...values,
-      pageNum: params.pageNum,
-      pageSize: params.pageSize || pagination.pageSize
-    })
-    // const list = Array.from({ length: 50 })
-    //   .fill({})
-    //   .map((item: any) => {
-    //     item = { ...data.list[0] }
-    //     item.userId = Math.random()
-    //     return item
-    //   })
-    // setData(list)
-    // setTotal(list.length)
-    setData(data.list)
-    setTotal(data.page.total)
-    // setPagination({
-    //   current: data.page.pageNum,
-    //   pageSize: data.page.pageSize
-    // })
-  }
+  // const getUserList = async (params: PageParams) => {
+  //   const values = form.getFieldsValue()
+  //   const data = await api.getUserList({
+  //     ...values,
+  //     pageNum: params.pageNum,
+  //     pageSize: params.pageSize || pagination.pageSize
+  //   })
+  // const list = Array.from({ length: 50 })
+  //   .fill({})
+  //   .map((item: any) => {
+  //     item = { ...data.list[0] }
+  //     item.userId = Math.random()
+  //     return item
+  //   })
+  // setData(list)
+  // setTotal(list.length)
+  // setData(data.list)
+  // setTotal(data.page.total)
+  // setPagination({
+  //   current: data.page.pageNum,
+  //   pageSize: data.page.pageSize
+  // })
+  // }
 
   const handleCreate = () => {
     userRef.current?.open('create')
@@ -106,9 +122,10 @@ export default function UserList() {
       })
       message.success('删除成功')
       setUserIds([])
-      getUserList({
-        pageNum: 1
-      })
+      // getUserList({
+      //   pageNum: 1
+      // })
+      search.reset()
     } catch (error) {}
   }
 
@@ -197,10 +214,10 @@ export default function UserList() {
         </Form.Item>
         <Form.Item name='userName' label='用户名称'>
           <Space>
-            <Button type='primary' onClick={handleSearch}>
+            <Button type='primary' onClick={search.submit}>
               搜索
             </Button>
-            <Button type='default' onClick={handleReset}>
+            <Button type='default' onClick={search.reset}>
               重置
             </Button>
           </Space>
@@ -228,34 +245,36 @@ export default function UserList() {
               setUserIds(selectedRowKeys as number[])
             }
           }}
-          dataSource={data}
+          // dataSource={data}
           columns={columns}
-          pagination={{
-            position: ['bottomRight'],
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total,
-            showQuickJumper: true,
-            showSizeChanger: true,
-            showTotal: function (total) {
-              return `总共：${total}条`
-            },
-            onChange: (page, pageSize) => {
-              setPagination({
-                current: page,
-                pageSize: pageSize
-              })
-            }
-          }}
+          // pagination={{
+          //   position: ['bottomRight'],
+          //   current: pagination.current,
+          //   pageSize: pagination.pageSize,
+          //   total,
+          //   showQuickJumper: true,
+          //   showSizeChanger: true,
+          //   showTotal: function (total) {
+          //     return `总共：${total}条`
+          //   },
+          //   onChange: (page, pageSize) => {
+          //     setPagination({
+          //       current: page,
+          //       pageSize: pageSize
+          //     })
+          //   }
+          // }}
+          {...tableProps}
         />
       </div>
 
       <CreateUser
         mRef={userRef}
         update={() => {
-          getUserList({
-            pageNum: 1
-          })
+          // getUserList({
+          //   pageNum: 1
+          // })
+          search.reset
         }}
       />
     </div>
