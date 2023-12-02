@@ -51,6 +51,6 @@ export default {
     return request.post('/dept/delete', params)
   },
   getMenuList(params?: Menu.Params) {
-    return request.get('/menu/list', params)
+    return request.get<Menu.MenuItem[]>('/menu/list', params)
   }
 }

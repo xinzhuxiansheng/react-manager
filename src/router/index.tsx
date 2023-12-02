@@ -4,6 +4,7 @@ import Welcome from '@/views/welcome'
 import Dashboard from '@/views/dashboard'
 import User from '@/views/system/user'
 import Dept from '@/views/system/dept'
+import Menu from '@/views/system/menu'
 import Error403 from '@/views/403'
 import Error404 from '@/views/404'
 import Layout from '@/layout'
@@ -35,6 +36,10 @@ const route = [
       {
         path: '/deptList',
         element: <Dept />
+      },
+      {
+        path: '/menuList',
+        element: <Menu />
       }
     ]
   },
