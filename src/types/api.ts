@@ -17,7 +17,7 @@ export interface ResultData<T> {
 
 export interface PageParams {
   pageNum: number | undefined
-  pageSize: number | undefined
+  pageSize?: number
 }
 
 export namespace Login {
@@ -48,6 +48,20 @@ export namespace User {
     createId: number
     deptName: string
     userImg: string
+  }
+  export interface CreateParams {
+    userName: string
+    userEmail: string
+    mobile?: string
+    deptId: string
+    job?: string
+    state?: number
+    roleList: string[]
+    userImg: string
+  }
+
+  export interface EditParams extends CreateParams {
+    userId: number
   }
 }
 

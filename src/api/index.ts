@@ -25,5 +25,14 @@ export default {
   },
   getUserList(params: User.Params) {
     return request.get<ResultData<User.UserItem>>('/users/list', params)
+  },
+  createUser(params: User.CreateParams) {
+    return request.post('/users/create', params)
+  },
+  editUser(params: User.EditParams) {
+    return request.post('/users/edit', params)
+  },
+  delUser(params: { userIds: number[] }) {
+    return request.post('/users/edit', params)
   }
 }
