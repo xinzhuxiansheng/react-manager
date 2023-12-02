@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { ResultData, Login, User, Databoard } from '@/types/api'
+import { ResultData, Login, User, Databoard, Dept, Menu } from '@/types/api'
 export default {
   login(params: Login.params) {
     return request.post<string>('/users/login', params, { showLoading: false })
@@ -34,5 +34,23 @@ export default {
   },
   delUser(params: { userIds: number[] }) {
     return request.post('/users/edit', params)
+  },
+  getDeptList(params?: Dept.Params) {
+    return request.get<Dept.DeptItem[]>('dept/list', params)
+  },
+  getAllUserList() {
+    return request.get<User.UserItem[]>('/users/all/list')
+  },
+  createDept(params: Dept.CreateParams) {
+    return request.post('/dept/create', params)
+  },
+  editDept(params: Dept.EditParams) {
+    return request.post('/dept/edit', params)
+  },
+  deleteDept(params: Dept.DelParams) {
+    return request.post('/dept/delete', params)
+  },
+  getMenuList(params?: Menu.Params) {
+    return request.get('/menu/list', params)
   }
 }
